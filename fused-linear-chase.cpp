@@ -64,11 +64,11 @@ double fused_chase(std::size_t count, Pointers&... ptrs) {
    return t1 - t0;
 }
 
-#ifndef MIN_SIZE
-#define MIN_SIZE (sizeof(void*))
+#ifndef MIN_STRIDE
+#define MIN_STRIDE (sizeof(void*))
 #endif
-#ifndef MAX_SIZE
-#define MAX_SIZE 120
+#ifndef MAX_STRIDE
+#define MAX_STRIDE 120
 #endif
 
 int main() {
@@ -79,7 +79,7 @@ int main() {
    fmt::printf("     fuse");
    for (int i = 1; i <= 8; ++i) fmt::printf("%12d", i);
    fmt::printf("\n    stride\n");
-   for (std::size_t stride = MIN_SIZE; stride <= MAX_SIZE;
+   for (std::size_t stride = MIN_STRIDE; stride <= MAX_STRIDE;
 	 stride += sizeof(void*)) {
       size_t memsize = std::min((size_t) 1<<26, stride * 1024 * sizeof(void*));
       std::size_t count = (std::size_t) 1<<30;

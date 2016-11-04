@@ -54,7 +54,7 @@ Following preprocessor macros allow to configure this utility:
   the L3 cache.
 * *GRANULARITY*: All powers of two between *MIN_SIZE* and *MAX_SIZE*
   are tested. The granularity specifies how many sizes are tested
-  in-between. For a granularity of _n_ we get _2^n_ sizes in-between.
+  in-between. For a granularity of _n_ > 0 we get _2^{n-1}_ sizes in-between.
 
 The output consists of a header line and then a line for each tested
 buffer size from *MIN_SIZE* to *MAX_SIZE* where the memory size and

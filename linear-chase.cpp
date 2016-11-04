@@ -36,16 +36,16 @@
 #include "chase-pointers.hpp"
 #include "linear-chain.hpp"
 
-#ifndef MIN_SIZE
-#define MIN_SIZE (sizeof(void*))
+#ifndef MIN_STRIDE
+#define MIN_STRIDE (sizeof(void*))
 #endif
-#ifndef MAX_SIZE
-#define MAX_SIZE 1200
+#ifndef MAX_STRIDE
+#define MAX_STRIDE 1200
 #endif
 
 int main() {
    fmt::printf("   stride  time in ns\n");
-   for (std::size_t stride = MIN_SIZE; stride <= MAX_SIZE;
+   for (std::size_t stride = MIN_STRIDE; stride <= MAX_STRIDE;
 	 stride += sizeof(void*)) {
       size_t memsize = std::min((size_t) 1<<26, stride * 1024 * sizeof(void*));
       void** memory = create_linear_chain(memsize, stride);

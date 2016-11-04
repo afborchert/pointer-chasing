@@ -102,7 +102,7 @@ parameters, i.e. *MIN_SIZE* = 1024, *MAX_SIZE* = 32 MiB, and
 
 A gnuplot script may be helpful to visualize this:
 
-```
+```gnuplot
 set terminal png size 900, 500
 set output "random-chase.png"
 set xlabel "memory area in bytes"
@@ -133,6 +133,53 @@ plot "random-chase.out" using 1:2 with linespoints lt 2 title "Intel Xeon 5650"
 Result:
 
 ![Memory access times with random chain](random-chase.png)
+
+## linear-chase
+
+Following preprocessor macros configure this utility:
+
+* *MIN_STRIDE*: Minimal stride value. By default, `sizeof(void*)`
+  is taken.
+* *MAX_STRIDE*: Maximal stride value.
+
+The output consists of a header line and then a line for each
+tested stride value from *MIN_STRIDE* to *MAX_STRIDE* in
+steps of `sizeof(void*)` and the measured acess time in
+nanoseconds.
+
+This is a sample output for the same Intel Xeon 5650
+compiled for an 32-bit address space, i.e. `sizeof(void*) == 4`
+which has been shortened for brevity:
+
+```
+   stride  time in ns
+        4     1.30385
+        8     1.31316
+       12     1.31316
+       ...
+     1188    13.57868
+     1192    13.10371
+     1196    13.52280
+     1200    13.58800
+```
+
+A gnuplot script may be helpful as before:
+
+```gnuplot
+set terminal png size 900, 500
+set output "linear-chase.png"
+set xlabel "stride in bytes"
+set ylabel "avg access time in ns"
+set title "Access times in dependence of stride"
+set key out
+set pointsize 0.5
+
+plot "linear-chase.out" using 1:2 with linespoints lt 2 title "Intel Xeon 5650"
+```
+
+Result:
+
+![Memory access times in dependence of stride](linear-chase.png)
 
 ## Downloading and testing
 

@@ -103,8 +103,8 @@ parameters, i.e. *MIN_SIZE* = 1024, *MAX_SIZE* = 32 MiB, and
 A gnuplot script may be helpful to visualize this:
 
 ```
-set terminal svg size 900, 500
-set output "random-chase.svg"
+set terminal png size 900, 500
+set output "random-chase.png"
 set xlabel "memory area in bytes"
 set logscale x
 set ylabel "avg access time in ns"
@@ -132,7 +132,7 @@ plot "random-chase.out" using 1:2 with linespoints lt 2 title "Intel Xeon 5650"
 
 Result:
 
-![Memory access times with random chain](random-chase.svg)
+![Memory access times with random chain](random-chase.png)
 
 ## Downloading and testing
 

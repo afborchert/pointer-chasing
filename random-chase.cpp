@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2016 Andreas F. Borchert
+   Copyright (c) 2016, 2018 Andreas F. Borchert
    All rights reserved.
 
    Permission is hereby granted, free of charge, to any person obtaining
@@ -73,21 +73,22 @@ unsigned int log2(std::size_t val) {
 #define MIN_SIZE 1024
 #endif
 #ifndef MAX_SIZE
-#define MAX_SIZE 1024 * 1024 * 32
+#define MAX_SIZE 1024 * 1024 * 128
 #endif
 #ifndef GRANULARITY
-#define GRANULARITY 1u
+#define GRANULARITY (1u)
 #endif
 
 int main() {
-   fmt::printf("  memsize  time in ns\n");
+   fmt::printf("   memsize  time in ns\n");
    for (std::size_t memsize = MIN_SIZE; memsize <= MAX_SIZE;
-	 memsize += (1 << (std::max(GRANULARITY, log2(memsize))-GRANULARITY))) {
+	 memsize += (std::size_t{1} <<
+	    (std::max(GRANULARITY, log2(memsize))-GRANULARITY))) {
       void** memory = create_random_chain(memsize);
-      std::size_t count = std::max(memsize * 16, (std::size_t) 1<<30);
+      std::size_t count = std::max(memsize * 16, std::size_t{1}<<30);
       double t = chase_pointers(memory, count);
       delete[] memory;
       double ns = t * 1000000000 / count;
-      fmt::printf(" %8u  %10.5lf\n", memsize, ns); std::cout.flush();
+      fmt::printf(" %9u  %10.5lf\n", memsize, ns); std::cout.flush();
    }
 }

@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2016 Andreas F. Borchert
+   Copyright (c) 2016, 2018 Andreas F. Borchert
    All rights reserved.
 
    Permission is hereby granted, free of charge, to any person obtaining
@@ -36,15 +36,15 @@ volatile void* chase_pointers_global; // to defeat optimizations
 /* follow a pointer chain the given number of times and
    return the measured time */
 double chase_pointers(void** memory, std::size_t count) {
-   double t0 = walltime();
+   WallTime<double> walltime;
    // chase the pointers count times
    void** p = (void**) memory;
    while (count-- > 0) {
       p = (void**) *p;
    }
-   double t1 = walltime();
+   auto elapsed = walltime.elapsed();
    chase_pointers_global = *p;
-   return t1 - t0;
+   return elapsed;
 }
 
 /* print pointer chain to std::cout (for debugging) */

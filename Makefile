@@ -2,15 +2,15 @@ CPPSources := $(wildcard *.cpp)
 Objects := $(patsubst %.cpp,%.o,$(CPPSources))
 
 fused-linear-chase-objects := fused-linear-chase.o \
-		chase-pointers.o linear-chain.o walltime.o
+		chase-pointers.o linear-chain.o
 linear-chase-objects := linear-chase.o \
-		chase-pointers.o linear-chain.o walltime.o
+		chase-pointers.o linear-chain.o
 random-chase-objects := random-chase.o \
-		chase-pointers.o walltime.o
+		chase-pointers.o
 
 CC := g++
 CPPFLAGS := -std=gnu++11 -Ifmt
-CXXFLAGS := $(CPPFLAGS) -g -Ofast
+CXXFLAGS := $(CPPFLAGS) -g -O2
 Targets := fused-linear-chase linear-chase random-chase
 
 .PHONY:		all clean realclean depend
@@ -30,7 +30,6 @@ random-chase:	$(random-chase-objects)
 		$(CXX) $(LDFLAGS) -o $@ $(random-chase-objects)
 
 # DO NOT DELETE
-walltime.o: walltime.cpp walltime.hpp
 random-chase.o: random-chase.cpp fmt/printf.hpp chase-pointers.hpp \
  uniform-int-distribution.hpp
 chase-pointers.o: chase-pointers.cpp fmt/printf.hpp chase-pointers.hpp \

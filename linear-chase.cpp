@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2016 Andreas F. Borchert
+   Copyright (c) 2016, 2018 Andreas F. Borchert
    All rights reserved.
 
    Permission is hereby granted, free of charge, to any person obtaining
@@ -47,9 +47,10 @@ int main() {
    fmt::printf("   stride  time in ns\n");
    for (std::size_t stride = MIN_STRIDE; stride <= MAX_STRIDE;
 	 stride += sizeof(void*)) {
-      size_t memsize = std::min((size_t) 1<<26, stride * 1024 * sizeof(void*));
+      size_t memsize = std::min(std::size_t{1}<<26,
+	 stride * 1024 * sizeof(void*));
       void** memory = create_linear_chain(memsize, stride);
-      std::size_t count = (std::size_t) 1<<30;
+      std::size_t count = std::size_t{1}<<30;
       double t = chase_pointers(memory, count);
       delete[] memory;
       double ns = t * 1000000000 / count;

@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2016 Andreas F. Borchert
+   Copyright (c) 2016, 2018 Andreas F. Borchert
    All rights reserved.
 
    Permission is hereby granted, free of charge, to any person obtaining
@@ -26,7 +26,22 @@
 #ifndef WALLTIME_HPP
 #define WALLTIME_HPP
 
-/* return real time in seconds since start of the process */
-double walltime();
+#include <chrono>
+
+template<typename T>
+class WallTime {
+   public:
+      WallTime() : t0(std::chrono::high_resolution_clock::now()) {
+      }
+      /* return real time in seconds using T since construction
+	 of this object */
+      T elapsed() const {
+	 using namespace std::chrono;
+	 auto time_spent = high_resolution_clock::now() - t0;
+	 return duration<T, seconds::period>(time_spent).count();
+      }
+   private:
+      std::chrono::high_resolution_clock::time_point t0;
+};
 
 #endif

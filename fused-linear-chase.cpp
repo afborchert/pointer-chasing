@@ -1,5 +1,5 @@
 /* 
-   Copyright (c) 2016 Andreas F. Borchert
+   Copyright (c) 2016, 2018 Andreas F. Borchert
    All rights reserved.
 
    Permission is hereby granted, free of charge, to any person obtaining
@@ -53,15 +53,15 @@ volatile void* fused_linear_global; // to defeat optimizations
 
 template<typename... Pointers>
 double fused_chase(std::size_t count, Pointers&... ptrs) {
-   double t0 = walltime();
+   WallTime<double> walltime;
    // chase the pointers count times
    while (count-- > 0) {
       fused_action([](void**& p) { p = (void**) *p; }, ptrs...);
    }
-   double t1 = walltime();
+   auto elapsed = walltime.elapsed();
    // defeat the optimization that removes the chasing
    fused_action([](void**& p) { fused_linear_global = *p; }, ptrs...);
-   return t1 - t0;
+   return elapsed;
 }
 
 #ifndef MIN_STRIDE
@@ -81,13 +81,14 @@ int main() {
    fmt::printf("\n    stride\n");
    for (std::size_t stride = MIN_STRIDE; stride <= MAX_STRIDE;
 	 stride += sizeof(void*)) {
-      size_t memsize = std::min((size_t) 1<<26, stride * 1024 * sizeof(void*));
-      std::size_t count = (std::size_t) 1<<30;
+      size_t memsize = std::min(std::size_t{1}<<26,
+	 stride * 1024 * sizeof(void*));
+      std::size_t count = std::size_t{1}<<30;
       fmt::printf(" %8u", stride);
 
       auto print_result = [=](int fuse, double t) {
-	 double volume = (double) sizeof(void*) * count * fuse;
-	 double speed = (double) volume / t / (1<<30); /* in GiB/s */
+	 auto volume = static_cast<double>(sizeof(void*)) * count * fuse;
+	 auto speed = volume / t / (1<<30); /* in GiB/s */
 	 fmt::printf("  %10.5lf", speed); std::cout.flush();
       };
 

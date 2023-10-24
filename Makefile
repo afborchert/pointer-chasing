@@ -8,9 +8,9 @@ linear-chase-objects := linear-chase.o \
 random-chase-objects := random-chase.o \
 		chase-pointers.o
 
-CC := g++
+CXX := g++
 CPPFLAGS := -std=gnu++11 -Ifmt
-CXXFLAGS := $(CPPFLAGS) -g -O2
+CXXFLAGS := -g -O2
 Targets := fused-linear-chase linear-chase random-chase
 
 .PHONY:		all clean realclean depend
